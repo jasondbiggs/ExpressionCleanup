@@ -6,14 +6,15 @@
 
 
 void callCleanupFunction(WolframLibraryData libData, mint wlid) {
-		MLINK link = libData->getMathLink(libData);
-		MLPutFunction(link, "EvaluatePacket", 1);
-			MLPutFunction(link, "ExpressionCleanup`Private`iCleanup", 1);
-				MLPutInteger(link, wlid);
-		libData->processMathLink(link);
-		int pkt = MLNextPacket(link);
-		if (pkt == RETURNPKT)
-				MLNewPacket(link);
+	MLINK link = libData->getMathLink(libData);
+	MLPutFunction(link, "EvaluatePacket", 1);
+		MLPutFunction(link, "ExpressionCleanup`Private`iCleanup", 1);
+			MLPutInteger(link, wlid);
+	libData->processMathLink(link);
+	int pkt = MLNextPacket(link);
+	if (pkt == RETURNPKT) {
+		MLNewPacket(link);
+	}
 }
 
 extern "C" DLLEXPORT int deleteInstance(WolframLibraryData libData, mint Argc, MArgument * Args, MArgument Res) {
