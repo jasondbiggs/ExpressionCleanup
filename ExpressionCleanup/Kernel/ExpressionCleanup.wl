@@ -2,8 +2,9 @@
 
 BeginPackage["ExpressionCleanup`"]
 
-Cleanup::usage = "Cleanup[expr, func] evaluates func when there are no more references to expr in a Wolfram Language session."
+AddCleanupFunction::usage = "AddCleanupFunction[expr, func] evaluates func when there are no more references to expr in a Wolfram Language session."
 
+Cleanup::usage = "Cleanup[expr] calls any cleanup function registered with expr. \n Cleanup[] calls all registered cleanup functions."
 
 Begin["`Private`"]
 
@@ -52,9 +53,9 @@ deleteFunction = LibraryFunctionLoad[$library, "deleteInstance", {Integer}, Inte
 $cache = <| |>
 $store = Language`NewExpressionStore["ExpressionCleanup"];
 
-Attributes[Cleanup] = {HoldAll}
+Attributes[AddCleanupFunction] = {HoldAll}
 
-Cleanup[expr_, func_] /; $Initialized := Module[
+AddCleanupFunction[expr_, func_] /; $Initialized := Module[
 	{
 		mle = CreateManagedLibraryExpression["ExpressionCleanup", ExpressionCleanup]
 	},
@@ -62,9 +63,9 @@ Cleanup[expr_, func_] /; $Initialized := Module[
 	$cache[ManagedLibraryExpressionID[mle]] := func;
 ]
 
-Cleanup[expr_] := ($store["remove"[expr]];)
+Cleanup[expr_] /; $Initialized := ($store["remove"[expr]];)
 
-Cleanup[] := (Map[
+Cleanup[] /; $Initialized := (Map[
 	$store["remove"[#]]&,
 	$store["listTable"[]][[All, 1]]
 ];)

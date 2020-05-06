@@ -1,8 +1,8 @@
 # ExpressionCleanup
 
-This package exports one function, `Cleanup[expr, func]` which will call `func` when all references to `expr` are gone. `Cleanup[expr]` will call any cleanup code that has been registered for `expr`, and `Cleanup[]` will call all registered cleanup code.  All cleanup code is called when the kernel exits cleanly.
+`AddCleanupFunction[expr, func]` will call `func` when all references to `expr` are gone. 
 
-I'm not sold on the name `Cleanup`.  Maybe `AddReleaseFunction` and `CallReleaseFunction`.
+`Cleanup[expr]` will call any cleanup code that has been registered for `expr`, and `Cleanup[]` will call all registered cleanup code.  All cleanup code is called when the kernel exits cleanly.
 
 Note that 'references' includes anything in the output history, anything accessible via `%` or `Out[..]`.  In the example below, `$HistoryLength` is set to zero otherwise `Out[4]` would have kept the expression still available.
 
@@ -22,7 +22,7 @@ In[4]:= f = {1, 2, 3}
 
 Out[4]= {1, 2, 3}
 
-In[5]:= Cleanup[f,
+In[5]:= AddCleanupFunction[f,
   Print["calling deletion code"];
   Print["use any compound expression"];
 ]
