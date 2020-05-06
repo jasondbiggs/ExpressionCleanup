@@ -6,7 +6,7 @@ Paclet[
     Name -> "ExpressionCleanup",
     Description -> "A tool for automatic cleanup when expressions go out of scope.",
     Version -> "0.0.1",
-    MathematicaVersion -> "12.0+",
+    MathematicaVersion -> "11.0+",
     Loading -> Manual,
     Updating -> Automatic,
     Extensions -> {
